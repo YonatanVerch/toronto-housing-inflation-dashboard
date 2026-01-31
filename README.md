@@ -29,7 +29,8 @@ https://toronto-housing-inflation-dashboard.onrender.com/
 - **Pandas** – Time-series aggregation, inflation calculations, segmentation  
 - **Plotly** – Interactive pie and bar charts with real-time filtering  
 - **IPyLeaflet** – Geographic benchmark price visualization by region  
-- **Shiny for Python** – Reactive UI and dashboard framework  
+- **Shiny for Python** – Reactive UI and dashboard framework
+- **Excel** - Data cleaning, validation, and appending for accurate analysis
 
 ## Dashboard Screenshots
 
