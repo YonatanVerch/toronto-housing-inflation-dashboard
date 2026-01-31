@@ -57,9 +57,10 @@ These charts use **2025 benchmark prices** to quantify how cumulative inflation 
   - Townhouse: ~$776K  
   - Apartment: ~$586K  
 
-- **Price spread (max − min across regions):**  
-  - Detached homes exhibit the largest spread (>$1M)  
-  - Apartments show the tightest spread, indicating lower volatility  
+- **Additional inflation metrics:**  
+  - Detached homes are ~36% more expensive than the composite benchmark
+  - Apartments remain ~44% cheaper than detached homes
+  - Apartments show the tightest price dispersion, indicating lower volatility
 
 ### Regional & Temporal Inflation Patterns
 <img width="1618" height="477" alt="Dashboard Overview 3" src="https://github.com/user-attachments/assets/058abc9a-300b-4da1-b14c-557796a9d247" />
@@ -90,16 +91,20 @@ These visualizations analyze **regional inequality and time-based inflation dyna
   - Semi-Detached: **+61.7%**  
   - Composite: **+53.0%**  
   - Townhouse: **+49.1%**  
-  - Apartment: **+39.0%**  
+  - Apartment: **+39.0%**
 
 - **Volatility & risk:**  
-  Detached housing shows the greatest price volatility and correction risk, while apartments demonstrate lower volatility but persistent inflation pressure.
+  Roughly 50% of decade-long housing inflation occurred within three years, representing the most extreme price acceleration in modern Toronto history.
+  Apartments exhibit lower volatility but sustained upward pressure
 
 - **Post-peak adjustment (2023 → 2025):**  
-  Market cooling occurred across all segments, but inflation permanently reset price baselines.
+  Broad-based market cooling across all property types
+  Detached housing experienced the largest absolute declines
+  Despite correction, no property type returned to pre-COVID price levels, indicating inflation permanently reset market baselines.
 
 - **Geographic inequality:**  
   Central regions dominate top price rankings, while peripheral regions follow similar inflation trajectories at lower absolute price levels.
+  Inflation impacted the entire metropolitan market, not only premium neighborhoods
 
 ##  How to Use This Project
 1. Clone the repository  
