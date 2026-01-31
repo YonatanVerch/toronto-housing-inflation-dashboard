@@ -19,4 +19,3 @@ pandas
 plotly
 shiny
 shinywidgets
-plotly.graph_objects
