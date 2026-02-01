@@ -13,11 +13,22 @@ The analysis focuses on housing inflation dynamics driven by:
 
 Rather than treating housing prices as a single trend, this project decomposes inflation across **property types**, **regions**, and **time periods**, highlighting where inflation concentrated and where volatility increased heavily.
 
-##  Live Dashboard
+##  Live Dashboard & Map
 Access the full interactive dashboard here:
 
 https://toronto-housing-inflation-dashboard.onrender.com/
 
+##  Live Map Demo
+
+Explore housing benchmark prices and regional inflation trends across Toronto in real-time with the interactive map:
+- Hover over neighborhoods to see 2015–2025 benchmark prices.
+- Filter by property type to compare trends between Detached, Semi-Detached, Townhouse, Apartment, and Composite categories
+- Time slider to visualize how prices evolved year by year
+
+![ShinyMapGif-ezgif com-optimize (1)](https://github.com/user-attachments/assets/11b0ab7c-5842-42ff-9e3b-a35da2703fdc)
+
+
+Note: Map powered by IPyLeaflet, linked directly into the Shiny for Python dashboard for seamless interaction.
 ##  Repository Contents
 - `app.py` – Shiny for Python dashboard application  
 - `Toronto 2015-2025 - MLS_Google_MLS_FULL.csv` – MLS benchmark housing dataset  
