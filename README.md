@@ -25,7 +25,7 @@ Explore housing benchmark prices and regional inflation trends across Toronto in
 - Filter by property type to compare trends between Detached, Semi-Detached, Townhouse, Apartment, and Composite categories
 - Time slider to visualize how prices evolved year by year
 
-![ShinyMapGifUpdated-ezgif com-optimize](https://github.com/user-attachments/assets/cd222649-6a98-42e2-8845-1ff0581a8bbd)
+![ShinyMapGif-ezgif com-optimize (1)](https://github.com/user-attachments/assets/af66c28c-6a2c-4646-b82f-d8a5733aafce)
 
 
 Note: Map powered by IPyLeaflet, linked directly into the Shiny for Python dashboard for seamless interaction.
