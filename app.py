@@ -16,10 +16,8 @@ from plotly_streaming import render_plotly_streaming
 
 
 
-# --- Define property type categories once ---
 property_types = ["Composite", "Detached", "Semi-Detached", "Townhouse", "Apartment"]
 
-# --- Map property types to indices for color assignment ---
 property_colors = {
     "Composite": 0,
     "Detached": 1,
@@ -33,15 +31,12 @@ BASE_PATH = Path(__file__).resolve().parent
 def read_housing_data():
     """Load housing CSV and preprocess dates and normalized location names."""
 
-    # Use BASE_PATH instead of redefining it
     csv_path = BASE_PATH / "data" / "Toronto 2015-2025 - MLS_Google_MLS_FULL.csv"
     df = pd.read_csv(csv_path)
 
-    # Ensure Date column is datetime
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     df["Year"] = df["Date"].dt.year
 
-    # Normalize location names
     df["Location_norm"] = (
         df["Location"].astype(str)
         .str.lower()
@@ -49,7 +44,6 @@ def read_housing_data():
         .str.strip()
     )
 
-    # Clean column names of leading/trailing spaces
     df.columns = df.columns.str.strip()
 
     return df
@@ -142,7 +136,6 @@ def create_custom_icon(count):
 
     size_circle = 45 + (count / 10)
 
-    # Define the HTML code for the icon
     html_code = f"""
     <div style=".leaflet-div-icon.background:transparent !important;
         position:relative; width: {size_circle}px; height: {size_circle}px;">
@@ -159,7 +152,6 @@ def create_custom_icon(count):
     </div>
     """
 
-    # Create a custom DivIcon
     return DivIcon(
         icon_size=(50, 50), icon_anchor=(25, 25), html=html_code, class_name="dummy"
     )
@@ -276,7 +268,6 @@ app_ui = ui.page_fillable(
 
 def server(input, output, session):
 
-    # --- Step 2: Load housing data ---
     housing_df = read_housing_data()
 
     df_map = pd.read_csv(
@@ -286,7 +277,6 @@ def server(input, output, session):
     housing_df["Date"] = pd.to_datetime(housing_df["Date"])
     housing_df["Year"] = housing_df["Date"].dt.year
 
-    # --- Step 3: Merge housing counts with shapefile coordinates ---
     housing_by_region = (
         housing_df.groupby("Location")  # use the correct column
         .size()
@@ -305,14 +295,12 @@ def server(input, output, session):
     from ipyleaflet import Map, Marker, Popup
     from ipywidgets import HTML
 
-    # Precompute markers for all years
     all_years = housing_df["Year"].unique()
     markers_by_year = {}
 
     for year in all_years:
         housing_year = housing_df[housing_df["Year"] == year]
 
-        # Compute averages
         avg_year = housing_year.groupby("Location", as_index=False)[[
             "CompBenchmark", "SFDetachBenchmark", "SFAttachBenchmark",
             "THouseBenchmark", "ApartBenchmark"
@@ -320,7 +308,6 @@ def server(input, output, session):
 
         avg_dict = avg_year.set_index("Location").to_dict('index')
 
-        # Create list of markers for this year
         markers = []
         for _, row in df_map.iterrows():
             lat, lon, name = row["LAT"], row["LON"], row["Location"]
@@ -354,7 +341,6 @@ def server(input, output, session):
         map_widget = Map(center=(43.7, -79.4), zoom=9, scroll_wheel_zoom=True)
         selected_year = int(input.selected_year())
 
-        # Add all markers for the selected year
         for marker in markers_by_year.get(selected_year, []):
             map_widget.add_layer(marker)
 
@@ -366,15 +352,12 @@ def server(input, output, session):
     @output
     @render_plotly_streaming()
     def plot_0():
-        # Ensure Date is datetime
         housing_df["Date"] = pd.to_datetime(housing_df["Date"])
 
-        # Use most recent date in dataset
         latest_date = housing_df["Date"].max()
 
         latest = housing_df[housing_df["Date"] == latest_date]
 
-        # Average benchmark prices across locations
         composition = pd.DataFrame({
             "Property Type": [
                 "Composite",
@@ -424,14 +407,11 @@ def server(input, output, session):
     @output
     @render_plotly_streaming()
     def plot_2():
-        # Ensure Date is datetime
         housing_df["Date"] = pd.to_datetime(housing_df["Date"])
 
-        # Most recent date
         latest_date = housing_df["Date"].max()
         latest = housing_df[housing_df["Date"] == latest_date]
 
-        # New metric: Price Spread (Max - Min) across locations
         composition = pd.DataFrame({
             "Property Type": [
                 "Composite",
@@ -481,14 +461,11 @@ def server(input, output, session):
     @output
     @render_plotly_streaming()
     def plot_1():
-        # Ensure Date is datetime
         housing_df["Date"] = pd.to_datetime(housing_df["Date"])
 
-        # Use most recent date in dataset
         latest_date = housing_df["Date"].max()
         latest = housing_df[housing_df["Date"] == latest_date]
 
-        # Total market value per property type (sum of benchmarks across locations)
         composition = pd.DataFrame({
             "Property Type": [
                 "Composite",
@@ -536,14 +513,11 @@ def server(input, output, session):
     @output
     @render_plotly_streaming()
     def plot_4():
-        # Ensure Date is datetime
         housing_df["Date"] = pd.to_datetime(housing_df["Date"])
 
-        # Most recent date
         latest_date = housing_df["Date"].max()
         latest = housing_df[housing_df["Date"] == latest_date]
 
-        # Melt the dataframe to long format: Location x Property Type x Benchmark
         df_long = latest.melt(
             id_vars=["Location"],
             value_vars=[
@@ -557,7 +531,6 @@ def server(input, output, session):
             value_name="Benchmark Value"
         )
 
-        # Clean Property Type names
         df_long["Property Type"] = df_long["Property Type"].replace({
             "CompBenchmark": "Composite",
             "SFDetachBenchmark": "Detached",
@@ -568,14 +541,11 @@ def server(input, output, session):
 
         # Aggregate: average benchmark per location & property type
         df_counts = df_long.groupby(["Location", "Property Type"], as_index=False)["Benchmark Value"].mean()
-        # 1️⃣ Compute total per location
         location_totals = df_counts.groupby('Location')['Benchmark Value'].sum()
 
-        # 2️⃣ Keep only top N locations (e.g., top 10)
         top_locations = location_totals.sort_values(ascending=False).head(5).index
         df_counts_filtered = df_counts[df_counts['Location'].isin(top_locations)]
 
-        # 3️⃣ Recompute total per location for text labels
         total_location = df_counts_filtered.groupby('Location', as_index=False)["Benchmark Value"].sum()
 
         # Create stacked bar chart
@@ -598,7 +568,6 @@ def server(input, output, session):
 
         fig3.update_traces(textposition="inside")
 
-        # Add total benchmark per location on top
         fig3.add_trace(
             go.Scatter(
                 x=total_location["Location"],
@@ -626,18 +595,15 @@ def server(input, output, session):
     @output
     @render_plotly_streaming()
     def plot_3():
-        # Ensure datetime
         housing_df["Date"] = pd.to_datetime(housing_df["Date"])
         housing_df["Year"] = housing_df["Date"].dt.year
 
-        # Use a benchmark metric (Composite is safest)
         df_yearly = (
             housing_df
             .groupby(["Location", "Year"], as_index=False)["CompBenchmark"]
             .mean()
         )
 
-        # Pick top 10 locations by latest year
         latest_year = df_yearly["Year"].max()
         top_locations = (
             df_yearly[df_yearly["Year"] == latest_year]
